@@ -1,23 +1,7 @@
 <template>
   <div class="header">
-    <!-- Cart Panel -->
-    <div
-      class="header__cart-panel"
-      :class="{ 'header__cart-panel--open': isCartOpen }"
-    >
-      <div class="header__cart-header">
-        <h3 class="header__cart-title">Your Cart</h3>
-        <button class="header__cart-close" @click="toggleCart">✕</button>
-      </div>
-      <div class="header__cart-content">
-        <p>Your cart is empty.</p>
-      </div>
-    </div>
-
-    <!-- Hamburger Menu -->
-    <div class="header__hamburger" @click="toggleMenu">
-      <i class="fa fa-bars"></i>
-    </div>
+    <!-- Mobile Menu  -->
+    <MobileMenu :is-open="isMenuOpen" @close-menu="toggleMenu" />
 
     <!-- Logo -->
     <div class="header__logo-wrapper">
@@ -25,21 +9,7 @@
     </div>
 
     <!-- Navigation -->
-    <ul class="header__nav" :class="{ 'header__nav--open': isMenuOpen }">
-      <router-link to="/home" class="header__nav-item header__nav-item--home"
-        >Home</router-link
-      >
-      <router-link
-        to="/products"
-        class="header__nav-item header__nav-item--products"
-        >Products</router-link
-      >
-      <router-link
-        to="/contact-us"
-        class="header__nav-item header__nav-item--contact"
-        >Contact Us</router-link
-      >
-    </ul>
+    <NavLinks :is-open="isMenuOpen" />
 
     <!-- Action Buttons -->
     <div class="header__icons">
@@ -52,9 +22,10 @@
         />
       </div>
       <button class="header__btn header__btn--signup">Sign Up</button>
-      <button class="header__btn header__btn--cart" @click="toggleCart">
+      <button class="cart__btn--cart" @click="toggleCart">
         <i class="fa fa-shopping-cart" style="font-size: 26px"></i>
       </button>
+      <Cart :is-cart-open="isCartOpen" @close-cart="toggleCart" />
     </div>
   </div>
 </template>
@@ -62,13 +33,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useSearchStore } from "@/Stores/search";
+import MobileMenu from "@/components/MobileMenu.vue";
+import NavLinks from "@/components/NavLinks.vue";
+import Cart from "@/components/Cart.vue";
 
 export default defineComponent({
-  name: "HeaderBar",
+  name: "header",
   data() {
     return {
-      isMenuOpen: false,
       isCartOpen: false,
+      isMenuOpen: false,
     };
   },
   computed: {
@@ -81,18 +55,34 @@ export default defineComponent({
       },
     },
   },
+  components: {
+    NavLinks,
+    MobileMenu,
+    Cart,
+  },
   methods: {
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
-    },
     toggleCart() {
       this.isCartOpen = !this.isCartOpen;
+      console.log("Cart toggled");
+    },
+    toggleMenu() {
+      this.isMenuOpen = !this.isMenuOpen;
     },
   },
 });
 </script>
 
 <style scoped lang="scss">
+.cart__btn--cart {
+  background: none;
+  border: none;
+  font-size: 16px;
+  display: flex;
+  &:hover {
+    cursor: pointer;
+    color: grey;
+  }
+}
 .header {
   background-color: bisque;
   display: flex;
@@ -102,14 +92,6 @@ export default defineComponent({
   gap: 10px;
   position: relative;
 
-  &__hamburger {
-    display: none;
-    font-size: 24px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-  }
-
   &__logo-wrapper {
     .header__logo {
       max-width: 50px;
@@ -117,41 +99,6 @@ export default defineComponent({
       padding-inline-start: 5px;
     }
   }
-
-  &__nav {
-    display: flex;
-    list-style: none;
-    gap: 130px;
-
-    &--open {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: 3.5rem;
-      left: 1rem;
-      background-color: white;
-      padding: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      z-index: 10;
-    }
-
-    &-item {
-      transition: color 0.2s ease;
-      text-decoration: none;
-      color: black;
-
-      &--home,
-      &--products,
-      &--contact {
-        &:hover {
-          color: grey;
-          cursor: pointer;
-        }
-      }
-    }
-  }
-
   &__icons {
     display: flex;
     align-items: center;
@@ -172,13 +119,6 @@ export default defineComponent({
       border-radius: 3px;
       padding: 0.3rem 0.6rem;
 
-      &:hover {
-        color: grey;
-        cursor: pointer;
-      }
-    }
-
-    &--cart {
       &:hover {
         color: grey;
         cursor: pointer;
@@ -252,7 +192,9 @@ export default defineComponent({
         margin: 0.5rem 0;
       }
     }
-
+    .header__btn--search {
+      display: none;
+    }
     &__icons {
       gap: 20px;
     }
