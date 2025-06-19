@@ -43,6 +43,10 @@
 
     <!-- Action Buttons -->
     <div class="header__icons">
+      <div class="header__btn header__btn--search">
+        <i style="font-size: 21px" class="fa fa-search"></i>
+        <input type="search" />
+      </div>
       <button class="header__btn header__btn--signup">Sign Up</button>
       <button class="header__btn header__btn--cart" @click="toggleCart">
         <i class="fa fa-shopping-cart" style="font-size: 26px"></i>
@@ -140,7 +144,7 @@ export default {
   &__icons {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 25px;
   }
 
   &__btn {
@@ -148,6 +152,10 @@ export default {
     border: none;
     font-size: 16px;
 
+    &--search {
+      display: flex;
+      gap: 10px;
+    }
     &--signup {
       border: 2px solid black;
       border-radius: 3px;
