@@ -17,11 +17,19 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ["add-to-cart"],
 });
 </script>
 
 <template>
   <div class="card">
+    <button
+      class="card__cart-button"
+      @click="$emit('add-to-cart', product)"
+      aria-label="Add to cart"
+    >
+      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+    </button>
     <article
       role="group"
       :aria-labelledby="`product-title-${product.id}`"
@@ -47,11 +55,28 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .card {
+  position: relative;
   border: 2px solid black;
   padding-block: 40px;
   margin: 2rem auto;
   max-width: 300px;
   text-align: center;
+
+  &__cart-button {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background-color: white;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    &:hover {
+      background-color: grey;
+    }
+  }
 }
 
 .products__image {
