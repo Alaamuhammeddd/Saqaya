@@ -45,7 +45,11 @@
     <div class="header__icons">
       <div class="header__btn header__btn--search">
         <i style="font-size: 21px" class="fa fa-search"></i>
-        <input type="search" />
+        <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search Products"
+        />
       </div>
       <button class="header__btn header__btn--signup">Sign Up</button>
       <button class="header__btn header__btn--cart" @click="toggleCart">
@@ -55,20 +59,27 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: "HeaderComponent",
-  props: {
-    msg: {
-      type: String,
-      required: true,
-    },
-  },
+<script lang="ts">
+import { defineComponent } from "vue";
+import { useSearchStore } from "@/Stores/search";
+
+export default defineComponent({
+  name: "HeaderBar",
   data() {
     return {
       isMenuOpen: false,
       isCartOpen: false,
     };
+  },
+  computed: {
+    searchQuery: {
+      get(): string {
+        return useSearchStore().query;
+      },
+      set(value: string) {
+        useSearchStore().setQuery(value);
+      },
+    },
   },
   methods: {
     toggleMenu() {
@@ -78,7 +89,7 @@ export default {
       this.isCartOpen = !this.isCartOpen;
     },
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

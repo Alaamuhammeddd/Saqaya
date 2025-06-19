@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import ProductCards from "./ProductCards.vue";
+import { useSearchStore } from "@/Stores/search";
 
 interface Product {
   id: number;
@@ -18,9 +19,17 @@ export default defineComponent({
   data() {
     return {
       products: [] as Product[],
+      loading: true,
     };
   },
+  computed: {
+    filteredProducts(): Product[] {
+      const query = useSearchStore().query.toLowerCase();
+      return this.products.filter((p) => p.title.toLowerCase().includes(query));
+    },
+  },
   mounted() {
+    this.loading = true;
     fetch("https://dummyjson.com/products")
       .then((res) => res.json())
       .then((data) => {
@@ -28,6 +37,9 @@ export default defineComponent({
       })
       .catch((error) => {
         console.error("Failed to fetch products:", error);
+      })
+      .finally(() => {
+        this.loading = false;
       });
   },
 });
@@ -35,8 +47,12 @@ export default defineComponent({
 
 <template>
   <div class="products">
+    <div v-if="loading" class="loading">Loading products...</div>
+    <div v-else-if="filteredProducts.length === 0">
+      <p>No products found.</p>
+    </div>
     <ProductCards
-      v-for="product in products"
+      v-for="product in filteredProducts"
       :key="product.id"
       :product="product"
       class="products__card"
