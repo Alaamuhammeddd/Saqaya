@@ -39,7 +39,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 3.5rem;
+    top: 2.5rem;
     left: 1rem;
     background-color: white;
     padding: 1rem;

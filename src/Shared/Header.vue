@@ -13,14 +13,7 @@
 
     <!-- Action Buttons -->
     <div class="header__icons">
-      <div class="header__btn header__btn--search">
-        <i style="font-size: 21px" class="fa fa-search"></i>
-        <input
-          type="text"
-          v-model="searchQuery"
-          placeholder="Search Products"
-        />
-      </div>
+      <SearchBar />
       <button class="header__btn header__btn--signup">Sign Up</button>
       <button class="cart__btn--cart" @click="toggleCart">
         <i class="fa fa-shopping-cart" style="font-size: 26px"></i>
@@ -32,41 +25,38 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useSearchStore } from "@/Stores/search";
 import MobileMenu from "@/components/MobileMenu.vue";
 import NavLinks from "@/components/NavLinks.vue";
 import Cart from "@/components/Cart.vue";
-
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { RootState } from "@/Stores/types";
+import SearchBar from "@/components/SearchBar.vue";
 export default defineComponent({
   name: "header",
   data() {
     return {
       isCartOpen: false,
       isMenuOpen: false,
+      isMobileSearch: false,
     };
   },
-  computed: {
-    searchQuery: {
-      get(): string {
-        return useSearchStore().query;
-      },
-      set(value: string) {
-        useSearchStore().setQuery(value);
-      },
-    },
-  },
+  computed: {},
   components: {
     NavLinks,
     MobileMenu,
     Cart,
+    SearchBar,
   },
   methods: {
     toggleCart() {
       this.isCartOpen = !this.isCartOpen;
-      console.log("Cart toggled");
     },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
+    },
+    toggleMobileSearch() {
+      this.isMobileSearch = !this.isMobileSearch;
     },
   },
 });
@@ -191,9 +181,6 @@ export default defineComponent({
       &-item {
         margin: 0.5rem 0;
       }
-    }
-    .header__btn--search {
-      display: none;
     }
     &__icons {
       gap: 20px;

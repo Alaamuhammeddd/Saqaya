@@ -6,11 +6,11 @@ interface Product {
   title: string;
   description: string;
   price: number;
-  thumbnail: string;
+  image: string;
 }
 
 export default defineComponent({
-  name: "ProductCards",
+  name: "ProductCard",
   props: {
     product: {
       type: Object as PropType<Product>,
@@ -22,31 +22,34 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="card">
+  <div class="product-card">
     <button
-      class="card__cart-button"
+      class="product-card__cart-button"
       @click="$emit('add-to-cart', product)"
       aria-label="Add to cart"
     >
       <i class="fa fa-shopping-cart" aria-hidden="true"></i>
     </button>
     <article
+      class="product-card__content"
       role="group"
       :aria-labelledby="`product-title-${product.id}`"
       :aria-describedby="`product-desc-${product.id}`"
     >
-      <img
-        :src="product.thumbnail"
-        :alt="product.title"
-        class="products__image"
-      />
-      <h2 :id="`product-title-${product.id}`" class="products__title">
+      <div class="product-card__image-wrapper">
+        <img
+          :src="product.image"
+          :alt="product.title"
+          class="product-card__image"
+        />
+      </div>
+      <h2 :id="`product-title-${product.id}`" class="product-card__title">
         {{ product.title }}
       </h2>
-      <p :id="`product-price-${product.id}`" class="products__price">
+      <p :id="`product-price-${product.id}`" class="product-card__price">
         ${{ product.price }}
       </p>
-      <p :id="`product-desc-${product.id}`" class="products__desc">
+      <p :id="`product-desc-${product.id}`" class="product-card__description">
         {{ product.description }}
       </p>
     </article>
@@ -54,13 +57,17 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
-.card {
+.product-card {
   position: relative;
   border: 2px solid black;
   padding-block: 40px;
   margin: 2rem auto;
   max-width: 300px;
   text-align: center;
+  &:hover {
+    transition: 0.3s ease;
+    box-shadow: 5px 10px 18px #888888;
+  }
 
   &__cart-button {
     position: absolute;
@@ -73,40 +80,49 @@ export default defineComponent({
     padding: 4px;
     border-radius: 4px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+
     &:hover {
       background-color: grey;
     }
   }
-}
 
-.products__image {
-  width: 100%;
-  height: auto;
-}
+  &__image-wrapper {
+    aspect-ratio: 1 / 1;
+    padding: 8px;
+    background-color: #fff;
+  }
 
-.products__title {
-  padding-inline: 4px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  line-height: 1.4rem;
-  max-height: calc(1.4rem * 2); // 2 lines
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
 
-.products__price {
-  font-weight: 600;
-}
+  &__title {
+    padding-inline: 4px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 1.4rem;
+    max-height: calc(1.4rem * 2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-.products__desc {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  &__price {
+    font-weight: 600;
+  }
+
+  &__description {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 </style>
