@@ -35,7 +35,8 @@ export default defineComponent({
   display: flex;
   list-style: none;
   gap: 130px;
-  color: aliceblue;
+  color: white;
+
   &--open {
     display: flex;
     flex-direction: column;
@@ -50,9 +51,9 @@ export default defineComponent({
   }
 
   &-item {
-    transition: color 0.2s ease;
     text-decoration: none;
-    color: white;
+    transition: color 0.2s ease;
+
     &--home,
     &--products,
     &--contact {
@@ -61,6 +62,20 @@ export default defineComponent({
         cursor: pointer;
       }
     }
+  }
+}
+
+// Mobile styles
+@media (max-width: 1023px) {
+  .header__nav-item {
+    color: black;
+  }
+}
+
+// Desktop styles
+@media (min-width: 1024px) {
+  .header__nav-item {
+    color: white;
   }
 }
 </style>

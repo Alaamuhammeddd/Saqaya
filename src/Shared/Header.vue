@@ -94,6 +94,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     gap: 25px;
+    color: 1e77d;
   }
 
   &__btn {
@@ -101,7 +102,9 @@ export default defineComponent({
     border: none;
     font-size: 16px;
     color: #1e077d;
-
+    --cart {
+      color: #1e077d;
+    }
     &--search {
       display: flex;
       gap: 10px;
