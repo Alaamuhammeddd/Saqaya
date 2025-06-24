@@ -43,7 +43,7 @@ defineProps({
       <div class="footer__contact">
         <p class="footer__address">399 Crowfield Rd, Phoenix, Arizona 85012</p>
         <a class="footer__email" href="mailto:asff@fddfd.com">asff@fddfd.com</a>
-        <p class="footer__phone">+201060618854</p>
+        <p class="footer__phone">+16462625023</p>
       </div>
     </div>
 
@@ -70,10 +70,11 @@ defineProps({
 
 <style scoped lang="scss">
 .footer {
-  background-color: bisque;
+  background: linear-gradient(135deg, #f3a354, #d388a2, #d63792);
   font-size: 21px;
   display: flex;
   flex-direction: column;
+  color: white;
 
   &__main {
     display: flex;
@@ -154,12 +155,13 @@ defineProps({
 
     &:hover {
       cursor: pointer;
-      color: grey;
+      color: #1e077d;
     }
   }
 
   &__rights {
     margin-bottom: 10px;
+    color: black;
 
     @media (min-width: 1024px) {
       margin-bottom: 0;

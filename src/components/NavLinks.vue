@@ -35,6 +35,7 @@ export default defineComponent({
   display: flex;
   list-style: none;
   gap: 130px;
+  color: aliceblue;
   &--open {
     display: flex;
     flex-direction: column;
@@ -51,12 +52,12 @@ export default defineComponent({
   &-item {
     transition: color 0.2s ease;
     text-decoration: none;
-    color: black;
+    color: white;
     &--home,
     &--products,
     &--contact {
       &:hover {
-        color: grey;
+        color: #1e077d;
         cursor: pointer;
       }
     }

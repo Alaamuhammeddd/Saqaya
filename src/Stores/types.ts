@@ -4,11 +4,16 @@ export interface RootState {
 export interface SelectedProductState {
   selectedProduct: Product | null;
 }
+
 export interface Product {
   id: number;
   title: string;
   description: string;
   price: number;
   image: string;
-  SelectedProduct: SelectedProductState;
+  category: string;
+  rating: {
+    rate: number;
+    count: number;
+  };
 }

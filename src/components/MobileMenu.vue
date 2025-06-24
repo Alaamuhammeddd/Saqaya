@@ -15,7 +15,7 @@ export default defineComponent({
 <template>
   <div class="mobile-menu" :class="{ 'mobile-menu__hamburger--open': isOpen }">
     <div class="mobile-menu__hamburger" @click="$emit('close-menu')">
-      <i class="fa fa-bars"> </i>
+      <i class="fa fa-bars" style="font-size: 21x"> </i>
     </div>
   </div>
 </template>

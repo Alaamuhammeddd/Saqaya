@@ -5,7 +5,7 @@
 
     <!-- Logo -->
     <div class="header__logo-wrapper">
-      <img class="header__logo" src="../assets/logo.webp" alt="logo" />
+      <img class="header__logo" src="../assets/Luna.png" alt="logo" />
     </div>
 
     <!-- Navigation -->
@@ -41,7 +41,6 @@ export default defineComponent({
       isMobileSearch: false,
     };
   },
-  computed: {},
   components: {
     NavLinks,
     MobileMenu,
@@ -74,7 +73,7 @@ export default defineComponent({
   }
 }
 .header {
-  background-color: bisque;
+  background: linear-gradient(135deg, #f3a354, #d388a2, #d63792);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -84,9 +83,11 @@ export default defineComponent({
 
   &__logo-wrapper {
     .header__logo {
-      max-width: 50px;
-      max-height: 50px;
+      width: 120px;
+      height: 120px;
       padding-inline-start: 5px;
+      display: flex;
+      align-items: center;
     }
   }
   &__icons {
@@ -99,70 +100,31 @@ export default defineComponent({
     background: none;
     border: none;
     font-size: 16px;
+    color: #1e077d;
 
     &--search {
       display: flex;
       gap: 10px;
     }
     &--signup {
-      border: 2px solid black;
+      border: 2px solid #1e077d;
       border-radius: 3px;
       padding: 0.3rem 0.6rem;
 
       &:hover {
-        color: grey;
+        color: white;
         cursor: pointer;
+        background-color: #1e077d;
+        transition: 0.3s ease;
       }
     }
   }
 
-  &__cart-panel {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100%;
-    width: 300px;
-    background-color: #414756;
-    color: #fff;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-
-    &--open {
-      transform: translateX(0);
-    }
-
-    .header__cart-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      border-bottom: 1px solid #ccc;
-      background-color: #414756;
-    }
-
-    .header__cart-title {
-      font-size: 1.2rem;
-    }
-
-    .header__cart-close {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: white;
-    }
-
-    .header__cart-content {
-      padding: 1rem;
-      flex-grow: 1;
-      overflow-y: auto;
-    }
-  }
   @media (max-width: 1023px) {
+    .header__logo {
+      display: flex;
+      align-items: center;
+    }
     flex-wrap: wrap;
     padding: 0.5rem;
 

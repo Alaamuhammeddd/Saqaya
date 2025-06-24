@@ -1,70 +1,81 @@
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import ProductCards from "./ProductCards.vue";
-import { RootState } from "@/Stores/types";
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  image: string;
-}
+import { RootState, Product } from "@/Stores/types";
+import SortDropdown from "./SortDropdown.vue";
 
 export default defineComponent({
   name: "ProductsPage",
-  components: {
-    ProductCards,
-  },
+  components: { ProductCards, SortDropdown },
   data() {
     return {
-      products: [] as Product[],
-      loading: true,
+      selectedCategory: "All",
     };
   },
+
   computed: {
+    products(): Product[] {
+      return this.store.getters["product/allProducts"];
+    },
+    loading(): boolean {
+      return this.store.getters["product/isLoading"];
+    },
     filteredProducts(): Product[] {
       const query = this.store.getters["search/searchQuery"].toLowerCase();
-      return this.products.filter((product) =>
-        product.title.toLowerCase().includes(query)
-      );
+
+      return this.products
+        .filter((product: Product) =>
+          this.selectedCategory === "All"
+            ? true
+            : product.category.toLowerCase() ===
+              this.selectedCategory.toLowerCase()
+        )
+        .filter((product: Product) =>
+          product.title.toLowerCase().includes(query)
+        );
     },
   },
-  async mounted() {
-    this.loading = true;
-    try {
-      const res = await fetch("https://fakestoreapi.com/products");
-      const data = await res.json();
-      this.products = data;
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    } finally {
-      this.loading = false;
-    }
-  },
+
   setup() {
     const store = useStore<RootState>();
+
+    onMounted(() => {
+      store.dispatch("product/fetchProducts");
+    });
+
     return { store };
   },
 });
 </script>
-
 <template>
-  <div class="sortDropdown"></div>
-  <div class="products">
+  <div class="productsList">
     <div v-if="loading" class="loading">Loading products...</div>
     <div v-else-if="filteredProducts.length === 0">No products found.</div>
-    <ProductCards
-      v-for="product in filteredProducts"
-      :key="product.id"
-      :product="product"
-      class="products__card"
-    />
+    <div class="products">
+      <!-- Product cards -->
+      <SortDropdown v-model="selectedCategory" />
+      <ProductCards
+        v-for="product in filteredProducts"
+        :key="product.id"
+        :product="product"
+        class="products__card"
+      />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.sortDropdown {
+  margin-bottom: 1rem;
+
+  select {
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+}
 @media (max-width: 1023px) {
   .products {
     display: flex;
@@ -81,6 +92,7 @@ export default defineComponent({
     margin-inline: auto;
     padding: 10px;
     max-width: fit-content;
+
     &__card {
       transition: transform 0.3s ease-in-out;
       display: flex;

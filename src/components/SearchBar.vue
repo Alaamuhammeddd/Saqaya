@@ -79,7 +79,7 @@ export default defineComponent({
 
   &__icon {
     font-size: 21px;
-    color: #333;
+    color: #1e077d;
     cursor: default;
 
     &.clickable {
