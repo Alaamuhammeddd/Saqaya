@@ -27,8 +27,12 @@
         </div>
       </div>
     </div>
+    <div class="cart-panel__footer">
+      <p>Total: {{ cartTotalPrice.toFixed(2) }}</p>
+      <button class="cart-panel__footer--btn">Checkout</button>
+    </div>
   </div>
-  <div class="cart-holder"></div>
+  <!-- <div class="cart-holder"></div> -->
 </template>
 
 <script lang="ts">
@@ -44,8 +48,9 @@ export default defineComponent({
   },
   emits: ["close-cart"],
   computed: {
-    ...mapGetters("cart", ["cartItems"]),
+    ...mapGetters("cart", ["cartItems", "cartTotalPrice"]),
   },
+
   methods: {
     ...mapActions("cart", ["clearCart", "removeFromCart"]),
     removeItem(id: number) {
@@ -72,6 +77,22 @@ export default defineComponent({
 .cart-holder {
   display: flex;
   font-size: 23px;
+}
+.cart-panel__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 10px;
+  &--btn {
+    border: 2px solid #1e077d;
+    padding: 5px;
+    border-radius: 5px;
+    &:hover {
+      color: whitesmoke;
+      background-color: #1e077d;
+      transition: 0.3s ease;
+    }
+  }
 }
 
 .cart__btn--cart {

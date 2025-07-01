@@ -4,7 +4,12 @@ export interface RootState {
 export interface SelectedProductState {
   selectedProduct: Product | null;
 }
-
+export interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
 export interface Product {
   id: number;
   title: string;

@@ -1,6 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import { createStore } from "vuex";
-import Cart from "@/components/Cart.vue"; // Adjust path if necessary
+import Cart from "@/components/Cart.vue";
 
 describe("Cart.vue", () => {
   let actions;

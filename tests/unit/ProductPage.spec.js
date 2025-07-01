@@ -41,7 +41,7 @@ describe("ProductsPage.vue", () => {
   });
 
   it('shows "No products found." when filtered list is empty', () => {
-    const store = createMockStore({ searchQuery: "xyz" }); // No matching product
+    const store = createMockStore({ searchQuery: "xyz" }); 
     const wrapper = shallowMount(ProductsPage, {
       global: { plugins: [store] },
     });

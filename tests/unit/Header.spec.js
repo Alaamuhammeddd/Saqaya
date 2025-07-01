@@ -1,7 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import Header from "@/Shared/Header.vue";
 
-// Mock child components
 jest.mock("@/components/MobileMenu.vue", () => ({
   name: "MobileMenu",
   template: "<div class='mobile-menu-mock'></div>",
@@ -22,7 +21,6 @@ jest.mock("@/components/SearchBar.vue", () => ({
   template: "<div class='search-bar-mock'></div>",
 }));
 
-// Mock router-link globally
 const globalStubs = {
   "router-link": {
     template: "<a><slot /></a>",
