@@ -5,7 +5,9 @@
 
     <!-- Logo -->
     <div class="header__logo-wrapper">
-      <img class="header__logo" src="../assets/Luna.png" alt="logo" />
+      <router-link to="/products">
+        <img class="header__logo" :src="logo" alt="logo" />
+      </router-link>
     </div>
 
     <!-- Navigation -->
@@ -26,6 +28,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import MobileMenu from "@/components/MobileMenu.vue";
+import logo from "@/assets/Luna.png";
 import NavLinks from "@/components/NavLinks.vue";
 import Cart from "@/components/Cart.vue";
 import { computed } from "vue";
@@ -33,9 +36,10 @@ import { useStore } from "vuex";
 import { RootState } from "@/Stores/types";
 import SearchBar from "@/components/SearchBar.vue";
 export default defineComponent({
-  name: "header",
+  name: "Appheader",
   data() {
     return {
+      logo,
       isCartOpen: false,
       isMenuOpen: false,
       isMobileSearch: false,

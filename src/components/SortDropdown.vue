@@ -1,11 +1,9 @@
 <template>
   <div class="sort-dropdown">
     <select v-model="localSelected" @change="emitChange">
-      <option>All</option>
-      <option>Men's clothing</option>
-      <option>Women's clothing</option>
-      <option>Jewelery</option>
-      <option>Electronics</option>
+      <option value="default">Default</option>
+      <option value="lowToHigh">Price: Low to High</option>
+      <option value="highToLow">Price: High to Low</option>
     </select>
   </div>
 </template>

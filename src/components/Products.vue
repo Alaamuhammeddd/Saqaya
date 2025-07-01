@@ -10,7 +10,7 @@ export default defineComponent({
   components: { ProductCards, SortDropdown },
   data() {
     return {
-      selectedCategory: "All",
+      selectedSort: "default",
     };
   },
 
@@ -24,16 +24,17 @@ export default defineComponent({
     filteredProducts(): Product[] {
       const query = this.store.getters["search/searchQuery"].toLowerCase();
 
-      return this.products
-        .filter((product: Product) =>
-          this.selectedCategory === "All"
-            ? true
-            : product.category.toLowerCase() ===
-              this.selectedCategory.toLowerCase()
-        )
-        .filter((product: Product) =>
-          product.title.toLowerCase().includes(query)
-        );
+      let filtered = this.products.filter((product: Product) =>
+        product.title.toLowerCase().includes(query)
+      );
+
+      if (this.selectedSort === "lowToHigh") {
+        filtered = [...filtered].sort((a, b) => a.price - b.price);
+      } else if (this.selectedSort === "highToLow") {
+        filtered = [...filtered].sort((a, b) => b.price - a.price);
+      }
+
+      return filtered;
     },
   },
 
@@ -54,7 +55,7 @@ export default defineComponent({
     <div v-else-if="filteredProducts.length === 0">No products found.</div>
     <div class="products">
       <!-- Product cards -->
-      <SortDropdown v-model="selectedCategory" />
+      <SortDropdown v-model="selectedSort" />
       <ProductCards
         v-for="product in filteredProducts"
         :key="product.id"

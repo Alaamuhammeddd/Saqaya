@@ -18,11 +18,11 @@
             <p>
               <strong>{{ item.title }}</strong>
             </p>
+            <p>${{ item.price.toFixed(2) }}</p>
             <button class="remove-item-btn" @click="removeItem(item.id)">
-              ✕
+              ✕ Remove
             </button>
           </div>
-          <p>${{ item.price.toFixed(2) }}</p>
           <!-- <CartQuantity :itemId="item.id" :quantity="item.quantity" /> -->
         </div>
       </div>
@@ -34,10 +34,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapGetters, mapActions } from "vuex";
-import CartQuantity from "./CartQuantity.vue";
 export default defineComponent({
   name: "Cart",
-  components: { CartQuantity },
   props: {
     isCartOpen: {
       type: Boolean,
@@ -58,23 +56,22 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.remove-all-btn {
-  background-color: #d9534f;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  margin-top: 1rem;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
-
+.remove-item-btn {
+  background-color: whitesmoke;
+  padding: 5px;
+  border-radius: 5px;
+  margin-block-start: 5px;
+  border: 2px solid #1e077d;
+  color: #c9302c;
   &:hover {
-    background-color: #c9302c;
+    background-color: #1e077d;
+    color: white;
+    transition: 0.2s ease;
   }
 }
 .cart-holder {
   display: flex;
-  font-size: 23px; // changed from size, which is invalid
+  font-size: 23px;
 }
 
 .cart__btn--cart {
