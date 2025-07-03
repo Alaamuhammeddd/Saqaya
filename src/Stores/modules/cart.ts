@@ -1,54 +1,44 @@
+import { defineStore } from "pinia";
 import { CartItem } from "@/Stores/types";
 
 const CART_KEY = "my-app-cart";
 
-export default {
-  namespaced: true,
-
-  state: (): { items: CartItem[] } => ({
-    items: JSON.parse(localStorage.getItem(CART_KEY) || "[]"),
+export const useCartStore = defineStore("cart", {
+  state: () => ({
+    items: JSON.parse(localStorage.getItem(CART_KEY) || "[]") as CartItem[],
   }),
 
   getters: {
-    cartItems: (state: { items: CartItem[] }) => state.items,
-
-    cartTotalPrice: (state: { items: CartItem[] }) =>
+    cartItems: (state) => state.items,
+    cartTotalPrice: (state) =>
       state.items.reduce(
         (total, item) => total + item.price * item.quantity,
         0
       ),
   },
 
-  mutations: {
-    ADD_TO_CART(state: { items: CartItem[] }, product: CartItem) {
-      const existing = state.items.find((item) => item.id === product.id);
-      if (existing) {
-        existing.quantity += product.quantity;
-      } else {
-        state.items.push({ ...product });
-      }
-      localStorage.setItem(CART_KEY, JSON.stringify(state.items));
-    },
-
-    REMOVE_FROM_CART(state: { items: CartItem[] }, id: string) {
-      state.items = state.items.filter((item) => item.id !== id);
-      localStorage.setItem(CART_KEY, JSON.stringify(state.items));
-    },
-  },
-
   actions: {
-    addToCart({ commit }: any, product: CartItem) {
+    addToCart(product: CartItem) {
       if (
         typeof product.price !== "number" ||
         typeof product.quantity !== "number"
       ) {
         throw new Error("Product must have a valid price and quantity");
       }
-      commit("ADD_TO_CART", product);
+
+      const existing = this.items.find((item) => item.id === product.id);
+      if (existing) {
+        existing.quantity += product.quantity;
+      } else {
+        this.items.push({ ...product });
+      }
+
+      localStorage.setItem(CART_KEY, JSON.stringify(this.items));
     },
 
-    removeFromCart({ commit }: any, id: string) {
-      commit("REMOVE_FROM_CART", id);
+    removeFromCart(id: number) {
+      this.items = this.items.filter((item) => item.id !== id);
+      localStorage.setItem(CART_KEY, JSON.stringify(this.items));
     },
   },
-};
+});

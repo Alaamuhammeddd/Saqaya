@@ -1,28 +1,13 @@
-import { Module } from "vuex";
-import { RootState } from "../types";
+// src/Stores/modules/search.ts
+import { defineStore } from "pinia";
 
-export interface SearchState {
-  searchQuery: string;
-}
-
-const search: Module<SearchState, RootState> = {
-  namespaced: true,
-  state: {
+export const useSearchStore = defineStore("search", {
+  state: () => ({
     searchQuery: "",
-  },
-  mutations: {
-    SET_SEARCH_QUERY(state, newQuery: string) {
-      state.searchQuery = newQuery;
-    },
-  },
+  }),
   actions: {
-    setSearchQuery({ commit }, newQuery: string) {
-      commit("SET_SEARCH_QUERY", newQuery);
+    setSearchQuery(value: string) {
+      this.searchQuery = value;
     },
   },
-  getters: {
-    searchQuery: (state) => state.searchQuery,
-  },
-};
-
-export default search;
+});

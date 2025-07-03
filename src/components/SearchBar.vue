@@ -1,4 +1,3 @@
-<!-- src/components/SearchBar.vue -->
 <template>
   <div class="search-bar">
     <i
@@ -23,11 +22,13 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { useStore } from "vuex";
+import { useSearchStore } from "@/Stores/modules/search"; // ✅ Pinia store
 
 const isMobileSearchVisible = ref(false);
 const isMobile = ref(false);
-const store = useStore();
+
+// ✅ Use Pinia search store
+const searchStore = useSearchStore();
 
 // Handle screen resize
 const handleResize = () => {
@@ -46,11 +47,11 @@ onBeforeUnmount(() => {
   window.removeEventListener("resize", handleResize);
 });
 
-// Vuex getters and setters for search query
+// ✅ Computed v-model binding with Pinia
 const searchQuery = computed({
-  get: () => store.getters["search/searchQuery"],
+  get: () => searchStore.searchQuery,
   set: (value: string) => {
-    store.dispatch("search/setSearchQuery", value);
+    searchStore.setSearchQuery(value);
   },
 });
 

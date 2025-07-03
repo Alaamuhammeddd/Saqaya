@@ -52,35 +52,31 @@
 <script lang="ts" setup>
 import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import { useSelectedProductStore } from "@/Stores/modules/selectedProduct";
+
+import { useCartStore } from "@/Stores/modules/cart";
 
 const route = useRoute();
-const store = useStore();
+const selectedProductStore = useSelectedProductStore();
+const cartStore = useCartStore();
 
-const product = computed(() => store.getters["selectedProduct/product"]);
-const isLoading = computed(() => store.getters["selectedProduct/isLoading"]);
-const error = computed(() => store.getters["selectedProduct/error"]);
-const count = computed(() => store.getters["quantity/count"]);
-const quantity = computed(() => count.value);
-
-const resetQuantity = () => store.commit("quantity/RESET");
+const product = computed(() => selectedProductStore.product);
+const isLoading = computed(() => selectedProductStore.isLoading);
+const error = computed(() => selectedProductStore.error);
 
 function addToCart() {
-  if (product.value && quantity.value > 0) {
-    store.dispatch("cart/addToCart", {
+  if (product.value) {
+    cartStore.addToCart({
       ...product.value,
-      quantity: quantity.value,
+      quantity: 1, // Default quantity is 1
     });
-    alert("added to cart");
-    resetQuantity();
+    alert("Added to cart");
   }
 }
 
-// Fetch product on mount
 onMounted(() => {
   const id = Number(route.params.id);
-  store.dispatch("selectedProduct/fetchSelectedProduct", id);
-  resetQuantity();
+  selectedProductStore.fetchSelectedProduct(id);
 });
 </script>
 

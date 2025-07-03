@@ -1,22 +1,22 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted } from "vue";
-import { useStore } from "vuex";
+import { useProductStore } from "@/Stores/modules/products";
+import { useSearchStore } from "@/Stores/modules/search"; // <-- if you migrated it
 import ProductCards from "./ProductCards.vue";
 import SortDropdown from "./SortDropdown.vue";
-import type { RootState, Product } from "@/Stores/types";
+import type { Product } from "@/Stores/types";
 
-// Store setup
-const store = useStore<RootState>();
+// Stores
+const productStore = useProductStore();
+const searchStore = useSearchStore(); // if using Pinia search module
 
 // Local state
 const selectedSort = ref("default");
 
 // Computed properties
-const products = computed(() => store.getters["product/allProducts"]);
-const loading = computed(() => store.getters["product/isLoading"]);
-const searchQuery = computed(() =>
-  store.getters["search/searchQuery"].toLowerCase()
-);
+const products = computed(() => productStore.allProducts);
+const loading = computed(() => productStore.isLoading);
+const searchQuery = computed(() => searchStore.searchQuery.toLowerCase());
 
 const filteredProducts = computed(() => {
   let filtered = products.value.filter((product: Product) =>
@@ -34,7 +34,7 @@ const filteredProducts = computed(() => {
 
 // Fetch products on mount
 onMounted(() => {
-  store.dispatch("product/fetchProducts");
+  productStore.fetchProducts();
 });
 </script>
 

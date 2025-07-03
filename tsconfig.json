@@ -19,7 +19,8 @@
     "tests/**/*.ts",
     "tests/unit/Cart.spec.js",
     "src",
-    "src/images.d.ts"
+    "src/images.d.ts",
+    "src/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }

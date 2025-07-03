@@ -35,8 +35,8 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { storeToRefs } from "pinia";
+import { useCartStore } from "@/Stores/modules/cart";
 
 const props = defineProps({
   isCartOpen: {
@@ -46,12 +46,12 @@ const props = defineProps({
 });
 const emit = defineEmits(["close-cart"]);
 
-const store = useStore();
-const cartItems = computed(() => store.getters["cart/cartItems"]);
-const cartTotalPrice = computed(() => store.getters["cart/cartTotalPrice"]);
+const cartStore = useCartStore();
+
+const { cartItems, cartTotalPrice } = storeToRefs(cartStore);
 
 function removeItem(id: number) {
-  store.dispatch("cart/removeFromCart", id);
+  cartStore.removeFromCart(id);
 }
 </script>
 

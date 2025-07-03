@@ -5,8 +5,8 @@ export interface SelectedProductState {
   selectedProduct: Product | null;
 }
 export interface CartItem {
-  id: string;
-  name: string;
+  id: number;
+  title: string;
   price: number;
   quantity: number;
 }
