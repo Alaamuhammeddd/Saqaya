@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <!-- Mobile Menu  -->
+    <!-- Mobile Menu -->
     <MobileMenu :is-open="isMenuOpen" @close-menu="toggleMenu" />
 
     <!-- Logo -->
@@ -25,44 +25,26 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { ref } from "vue";
 import MobileMenu from "@/components/MobileMenu.vue";
-import logo from "@/assets/Luna.png";
 import NavLinks from "@/components/NavLinks.vue";
 import Cart from "@/components/Cart.vue";
-import { computed } from "vue";
-import { useStore } from "vuex";
-import { RootState } from "@/Stores/types";
 import SearchBar from "@/components/SearchBar.vue";
-export default defineComponent({
-  name: "Appheader",
-  data() {
-    return {
-      logo,
-      isCartOpen: false,
-      isMenuOpen: false,
-      isMobileSearch: false,
-    };
-  },
-  components: {
-    NavLinks,
-    MobileMenu,
-    Cart,
-    SearchBar,
-  },
-  methods: {
-    toggleCart() {
-      this.isCartOpen = !this.isCartOpen;
-    },
-    toggleMenu() {
-      this.isMenuOpen = !this.isMenuOpen;
-    },
-    toggleMobileSearch() {
-      this.isMobileSearch = !this.isMobileSearch;
-    },
-  },
-});
+import logo from "@/assets/Luna.png";
+
+// State
+const isCartOpen = ref(false);
+const isMenuOpen = ref(false);
+
+// Methods
+function toggleCart() {
+  isCartOpen.value = !isCartOpen.value;
+}
+
+function toggleMenu() {
+  isMenuOpen.value = !isMenuOpen.value;
+}
 </script>
 
 <style scoped lang="scss">
@@ -94,6 +76,7 @@ export default defineComponent({
       align-items: center;
     }
   }
+
   &__icons {
     display: flex;
     align-items: center;
@@ -106,13 +89,12 @@ export default defineComponent({
     border: none;
     font-size: 16px;
     color: #1e077d;
-    --cart {
-      color: #1e077d;
-    }
+
     &--search {
       display: flex;
       gap: 10px;
     }
+
     &--signup {
       border: 2px solid #1e077d;
       border-radius: 3px;
@@ -151,6 +133,7 @@ export default defineComponent({
         margin: 0.5rem 0;
       }
     }
+
     &__icons {
       gap: 20px;
     }
