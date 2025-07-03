@@ -1,62 +1,55 @@
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script lang="ts" setup>
+import { defineProps } from "vue";
 import { Product } from "@/Stores/types";
 import { RouterLink } from "vue-router";
-export default defineComponent({
-  name: "ProductCard",
-  components: {
-    RouterLink,
-  },
-  props: {
-    product: {
-      type: Object as PropType<Product>,
-      required: true,
-    },
-  },
-  emits: ["add-to-cart"],
-});
+
+const props = defineProps<{
+  product: Product;
+}>();
 </script>
 
 <template>
   <div class="product-card">
-    <!-- <button
-      class="product-card__cart-button"
-      @click="$emit('add-to-cart', product)"
-      aria-label="Add to cart"
-    >
-      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-    </button> -->
     <RouterLink
-      :to="{ name: 'ProductView', params: { id: product.id } }"
+      :to="{ name: 'ProductView', params: { id: props.product.id } }"
       class="product-card__link"
     >
       <article
         class="product-card__content"
         role="group"
-        :aria-labelledby="`product-title-${product.id}`"
-        :aria-describedby="`product-desc-${product.id}`"
+        :aria-labelledby="`product-title-${props.product.id}`"
+        :aria-describedby="`product-desc-${props.product.id}`"
       >
         <div class="product-card__image-wrapper">
           <img
-            :src="product.image"
-            :alt="product.title"
+            :src="props.product.image"
+            :alt="props.product.title"
             class="product-card__image"
           />
         </div>
-        <h2 :id="`product-title-${product.id}`" class="product-card__title">
-          {{ product.title }}
+        <h2
+          :id="`product-title-${props.product.id}`"
+          class="product-card__title"
+        >
+          {{ props.product.title }}
         </h2>
         <p
-          :id="`product-category-${product.id}`"
+          :id="`product-category-${props.product.id}`"
           class="product-card__category"
         >
-          {{ product.category }}
+          {{ props.product.category }}
         </p>
-        <p :id="`product-price-${product.id}`" class="product-card__price">
-          ${{ product.price }}
+        <p
+          :id="`product-price-${props.product.id}`"
+          class="product-card__price"
+        >
+          ${{ props.product.price }}
         </p>
-        <p :id="`product-desc-${product.id}`" class="product-card__description">
-          {{ product.description }}
+        <p
+          :id="`product-desc-${props.product.id}`"
+          class="product-card__description"
+        >
+          {{ props.product.description }}
         </p>
       </article>
     </RouterLink>
@@ -71,10 +64,12 @@ export default defineComponent({
   margin: 2rem auto;
   max-width: 300px;
   text-align: center;
+
   &:hover {
     transition: 0.3s ease;
     box-shadow: 5px 10px 18px #888888;
   }
+
   &__link {
     text-decoration: none;
     color: black;
@@ -123,6 +118,7 @@ export default defineComponent({
   &__price {
     font-weight: 600;
   }
+
   &__category {
     font-size: 12px;
     color: #888888;

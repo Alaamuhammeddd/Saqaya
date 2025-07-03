@@ -21,56 +21,45 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from "vue";
-import { mapGetters } from "vuex";
-import { RootState } from "@/Stores/types";
+<script lang="ts" setup>
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useStore } from "vuex";
 
-export default defineComponent({
-  name: "SearchBar",
-  data() {
-    return {
-      isMobileSearchVisible: false,
-      isMobile: false,
-    };
-  },
-  methods: {
-    toggleMobileSearch() {
-      this.isMobileSearchVisible = !this.isMobileSearchVisible;
-    },
-    handleResize() {
-      this.isMobile = window.innerWidth <= 1023;
-      if (!this.isMobile) {
-        this.isMobileSearchVisible = false;
-      }
-    },
-  },
+const isMobileSearchVisible = ref(false);
+const isMobile = ref(false);
+const store = useStore();
 
-  mounted() {
-    this.handleResize();
-    window.addEventListener("resize", this.handleResize);
-  },
+// Handle screen resize
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 1023;
+  if (!isMobile.value) {
+    isMobileSearchVisible.value = false;
+  }
+};
 
-  beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  },
+onMounted(() => {
+  handleResize();
+  window.addEventListener("resize", handleResize);
+});
 
-  computed: {
-    ...mapGetters("search", {
-      searchQueryGetter: "searchQuery",
-    }),
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", handleResize);
+});
 
-    searchQuery: {
-      get(): string {
-        return this.searchQueryGetter;
-      },
-      set(value: string) {
-        this.$store.dispatch("search/setSearchQuery", value);
-      },
-    },
+// Vuex getters and setters for search query
+const searchQuery = computed({
+  get: () => store.getters["search/searchQuery"],
+  set: (value: string) => {
+    store.dispatch("search/setSearchQuery", value);
   },
 });
+
+// Toggle search visibility on mobile
+const toggleMobileSearch = () => {
+  isMobileSearchVisible.value = !isMobileSearchVisible.value;
+};
 </script>
+
 <style scoped lang="scss">
 .search-bar {
   display: flex;

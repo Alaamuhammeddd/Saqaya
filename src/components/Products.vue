@@ -1,61 +1,52 @@
-<script lang="ts">
-import { defineComponent, computed, onMounted } from "vue";
+<script lang="ts" setup>
+import { ref, computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import ProductCards from "./ProductCards.vue";
-import { RootState, Product } from "@/Stores/types";
 import SortDropdown from "./SortDropdown.vue";
+import type { RootState, Product } from "@/Stores/types";
 
-export default defineComponent({
-  name: "ProductsPage",
-  components: { ProductCards, SortDropdown },
-  data() {
-    return {
-      selectedSort: "default",
-    };
-  },
+// Store setup
+const store = useStore<RootState>();
 
-  computed: {
-    products(): Product[] {
-      return this.store.getters["product/allProducts"];
-    },
-    loading(): boolean {
-      return this.store.getters["product/isLoading"];
-    },
-    filteredProducts(): Product[] {
-      const query = this.store.getters["search/searchQuery"].toLowerCase();
+// Local state
+const selectedSort = ref("default");
 
-      let filtered = this.products.filter((product: Product) =>
-        product.title.toLowerCase().includes(query)
-      );
+// Computed properties
+const products = computed(() => store.getters["product/allProducts"]);
+const loading = computed(() => store.getters["product/isLoading"]);
+const searchQuery = computed(() =>
+  store.getters["search/searchQuery"].toLowerCase()
+);
 
-      if (this.selectedSort === "lowToHigh") {
-        filtered = [...filtered].sort((a, b) => a.price - b.price);
-      } else if (this.selectedSort === "highToLow") {
-        filtered = [...filtered].sort((a, b) => b.price - a.price);
-      }
+const filteredProducts = computed(() => {
+  let filtered = products.value.filter((product: Product) =>
+    product.title.toLowerCase().includes(searchQuery.value)
+  );
 
-      return filtered;
-    },
-  },
+  if (selectedSort.value === "lowToHigh") {
+    filtered = [...filtered].sort((a, b) => a.price - b.price);
+  } else if (selectedSort.value === "highToLow") {
+    filtered = [...filtered].sort((a, b) => b.price - a.price);
+  }
 
-  setup() {
-    const store = useStore<RootState>();
+  return filtered;
+});
 
-    onMounted(() => {
-      store.dispatch("product/fetchProducts");
-    });
-
-    return { store };
-  },
+// Fetch products on mount
+onMounted(() => {
+  store.dispatch("product/fetchProducts");
 });
 </script>
+
 <template>
   <div class="productsList">
     <div v-if="loading" class="loading">Loading products...</div>
     <div v-else-if="filteredProducts.length === 0">No products found.</div>
     <div class="products">
-      <!-- Product cards -->
+      <!-- Sort Dropdown -->
       <SortDropdown v-model="selectedSort" />
+
+      <!-- Product Cards -->
       <ProductCards
         v-for="product in filteredProducts"
         :key="product.id"
@@ -77,6 +68,7 @@ export default defineComponent({
     border: 1px solid #ccc;
   }
 }
+
 @media (max-width: 1023px) {
   .products {
     display: flex;

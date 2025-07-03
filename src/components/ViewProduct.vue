@@ -44,61 +44,58 @@
     </div>
   </div>
 
-  <div v-else class="product-view__error">Product not found.</div>
+  <div v-else class="product-view__error">
+    {{ error || "Product not found." }}
+  </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { mapGetters, mapMutations } from "vuex";
+import { useStore } from "vuex";
 
-export default defineComponent({
-  name: "ProductDetail",
+const route = useRoute();
+const store = useStore();
 
-  computed: {
-    // From selectedProduct module
-    ...mapGetters("selectedProduct", ["product", "isLoading", "error"]),
-    // From quantity module
-    ...mapGetters("quantity", ["count"]),
-    quantity(): number {
-      return this.count;
-    },
-  },
+const product = computed(() => store.getters["selectedProduct/product"]);
+const isLoading = computed(() => store.getters["selectedProduct/isLoading"]);
+const error = computed(() => store.getters["selectedProduct/error"]);
+const count = computed(() => store.getters["quantity/count"]);
+const quantity = computed(() => count.value);
 
-  methods: {
-    // Reset quantity
-    ...mapMutations("quantity", ["RESET"]),
+const resetQuantity = () => store.commit("quantity/RESET");
 
-    addToCart() {
-      if (this.product && this.quantity > 0) {
-        this.$store.dispatch("cart/addToCart", {
-          ...this.product,
-          quantity: this.quantity,
-        });
-        this.RESET(); // reset local quantity
-      }
-    },
-  },
+function addToCart() {
+  if (product.value && quantity.value > 0) {
+    store.dispatch("cart/addToCart", {
+      ...product.value,
+      quantity: quantity.value,
+    });
+    alert("added to cart");
+    resetQuantity();
+  }
+}
 
-  mounted() {
-    const id = Number(useRoute().params.id);
-    this.$store.dispatch("selectedProduct/fetchSelectedProduct", id);
-    this.RESET();
-  },
+// Fetch product on mount
+onMounted(() => {
+  const id = Number(route.params.id);
+  store.dispatch("selectedProduct/fetchSelectedProduct", id);
+  resetQuantity();
 });
 </script>
+
 <style scoped lang="scss">
 .product-view {
   display: flex;
   height: 100vh;
   padding: 1rem;
-
   &__loading,
   &__error {
     font-size: 1.2rem;
     text-align: center;
     width: 100%;
     margin-top: 2rem;
+    color: red;
   }
 
   &__image-container {

@@ -34,11 +34,6 @@ export default {
       state.items = state.items.filter((item) => item.id !== id);
       localStorage.setItem(CART_KEY, JSON.stringify(state.items));
     },
-
-    CLEAR_CART(state: { items: CartItem[] }) {
-      state.items = [];
-      localStorage.removeItem(CART_KEY);
-    },
   },
 
   actions: {
@@ -54,10 +49,6 @@ export default {
 
     removeFromCart({ commit }: any, id: string) {
       commit("REMOVE_FROM_CART", id);
-    },
-
-    clearCart({ commit }: any) {
-      commit("CLEAR_CART");
     },
   },
 };

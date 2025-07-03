@@ -1,8 +1,6 @@
 import { Module } from "vuex";
 
 import { Product } from "../types";
-
-// Product state
 export interface ProductState {
   products: Product[];
   loading: boolean;

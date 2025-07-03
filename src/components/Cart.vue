@@ -23,41 +23,36 @@
               ✕ Remove
             </button>
           </div>
-          <!-- <CartQuantity :itemId="item.id" :quantity="item.quantity" /> -->
         </div>
       </div>
     </div>
+
     <div class="cart-panel__footer">
-      <p>Total: {{ cartTotalPrice.toFixed(2) }}</p>
+      <p>Total: ${{ cartTotalPrice.toFixed(2) }}</p>
       <button class="cart-panel__footer--btn">Checkout</button>
     </div>
   </div>
-  <!-- <div class="cart-holder"></div> -->
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import { mapGetters, mapActions } from "vuex";
-export default defineComponent({
-  name: "Cart",
-  props: {
-    isCartOpen: {
-      type: Boolean,
-      required: false,
-    },
-  },
-  emits: ["close-cart"],
-  computed: {
-    ...mapGetters("cart", ["cartItems", "cartTotalPrice"]),
-  },
+<script lang="ts" setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
 
-  methods: {
-    ...mapActions("cart", ["clearCart", "removeFromCart"]),
-    removeItem(id: number) {
-      this.removeFromCart(id);
-    },
+const props = defineProps({
+  isCartOpen: {
+    type: Boolean,
+    required: false,
   },
 });
+const emit = defineEmits(["close-cart"]);
+
+const store = useStore();
+const cartItems = computed(() => store.getters["cart/cartItems"]);
+const cartTotalPrice = computed(() => store.getters["cart/cartTotalPrice"]);
+
+function removeItem(id: number) {
+  store.dispatch("cart/removeFromCart", id);
+}
 </script>
 
 <style scoped lang="scss">

@@ -1,6 +1,9 @@
 <template>
   <div class="sort-dropdown">
-    <select v-model="localSelected" @change="emitChange">
+    <select
+      v-model="localSelected"
+      @change="emit('update:modelValue', localSelected)"
+    >
       <option value="default">Default</option>
       <option value="lowToHigh">Price: Low to High</option>
       <option value="highToLow">Price: High to Low</option>
@@ -8,35 +11,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 
-export default defineComponent({
-  name: "SortDropdown",
-  props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
-  },
-  emits: ["update:modelValue"],
-  setup(props, { emit }) {
-    const localSelected = ref(props.modelValue);
+const props = defineProps<{
+  modelValue: string;
+}>();
 
-    watch(
-      () => props.modelValue,
-      (val) => {
-        localSelected.value = val;
-      }
-    );
+const emit = defineEmits<{
+  (e: "update:modelValue", value: string): void;
+}>();
 
-    const emitChange = () => {
-      emit("update:modelValue", localSelected.value);
-    };
+const localSelected = ref(props.modelValue);
 
-    return { localSelected, emitChange };
-  },
-});
+watch(
+  () => props.modelValue,
+  (val) => {
+    localSelected.value = val;
+  }
+);
 </script>
 
 <style scoped lang="scss">

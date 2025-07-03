@@ -1,35 +1,31 @@
-<!-- src/components/NavLinks.vue -->
 <template>
   <ul class="header__nav" :class="{ 'header__nav--open': isOpen }">
-    <router-link to="/home" class="header__nav-item header__nav-item--home"
-      >Home</router-link
-    >
+    <router-link to="/home" class="header__nav-item header__nav-item--home">
+      Home
+    </router-link>
     <router-link
       to="/products"
       class="header__nav-item header__nav-item--products"
-      >Products</router-link
     >
+      Products
+    </router-link>
     <router-link
       to="/contact-us"
       class="header__nav-item header__nav-item--contact"
-      >Contact</router-link
     >
+      Contact
+    </router-link>
   </ul>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script lang="ts" setup>
+import { defineProps } from "vue";
 
-export default defineComponent({
-  name: "NavLinks",
-  props: {
-    isOpen: {
-      type: Boolean,
-      default: false,
-    },
-  },
-});
+const props = defineProps<{
+  isOpen: boolean;
+}>();
 </script>
+
 <style scoped lang="scss">
 .header__nav {
   display: flex;

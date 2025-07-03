@@ -21,6 +21,7 @@ describe("Cart.vue", () => {
 
     getters = {
       cartItems: () => items,
+      cartTotalPrice: () => items.reduce((acc, item) => acc + item.price, 0),
     };
 
     store = createStore({
